@@ -37,7 +37,16 @@ installs.
 ## Quick Start
 
 1. Install ESPHome (the Home Assistant add-on works fine).
-2. Copy the `components/` folder next to your device YAML (so you have `components/brmesh/...`).
+2. Reference the component straight from GitHub in your device YAML:
+
+   ```yaml
+   external_components:
+     - source: github://GregoryIvo/brmesh-esphome
+       components: [brmesh]
+       refresh: 1d
+   ```
+
+   (Or copy the `components/` folder next to your YAML and use `source: {type: local, path: components}`.)
 3. Get your mesh key and bulb addresses. Easiest: export a backup from the BRMesh app and run
 
    ```bash
@@ -51,9 +60,8 @@ installs.
 
    ```yaml
    external_components:
-     - source:
-         type: local
-         path: components
+     - source: github://GregoryIvo/brmesh-esphome
+       components: [brmesh]
 
    esp32_ble:
      id: brmesh_ble

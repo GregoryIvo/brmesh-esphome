@@ -17,12 +17,21 @@ redone later is choosing a mesh key for a brand-new mesh.
 
 ## 1. Install the component
 
-1. In the ESPHome add-on, open the file editor (or use Samba / Studio Code Server) and create a folder
-   `components/brmesh` next to your device YAML files, i.e. `/config/esphome/components/brmesh/`.
-2. Copy these six files into it from this repository's `components/brmesh/`:
-   `__init__.py`, `light.py`, `brmesh.h`, `brmesh.cpp`, `brmesh_protocol.h`, `brmesh_protocol.cpp`.
-3. Whenever you update the component later, copy all six again and use **Clean Build Files** on the device
-   before installing. The boot log prints `Component version:` so you can tell which build is running.
+The easy way is to let ESPHome fetch it from GitHub. Put this in your device YAML:
+
+```yaml
+external_components:
+  - source: github://GregoryIvo/brmesh-esphome
+    components: [brmesh]
+    refresh: 1d
+```
+
+ESPHome re-downloads it once a day; use **Clean Build Files** on the device after an update. The boot log prints
+`Component version:` so you can tell which build is running.
+
+Manual alternative: create `components/brmesh/` next to your device YAML (`/config/esphome/components/brmesh/`
+in the add-on) and copy the six files from this repository's `components/brmesh/` into it, then use
+`source: {type: local, path: components}`.
 
 ## 2. Get your mesh key and addresses
 

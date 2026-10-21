@@ -36,6 +36,9 @@ wifi:
 captive_portal:
 
 external_components:
+  # Users: fetch from GitHub instead of copying files:
+  #   - source: github://GregoryIvo/brmesh-esphome
+  #     components: [brmesh]
   - source:
       type: local
       path: ../components
