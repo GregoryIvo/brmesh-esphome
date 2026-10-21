@@ -1,0 +1,87 @@
+substitutions:
+  device_name: brmesh-controller
+  friendly_name: BRMesh Controller
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+
+esp32:
+  variant: ESP32C3
+  flash_size: 4MB
+  framework:
+    type: esp-idf
+
+logger:
+  level: DEBUG
+
+esp32_ble:
+  id: brmesh_ble
+
+api:
+  encryption:
+    key: !secret brmesh_api_key
+
+ota:
+  - platform: esphome
+    password: !secret brmesh_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: BRMesh Fallback Hotspot
+    password: !secret brmesh_fallback_password
+
+captive_portal:
+
+external_components:
+  - source:
+      type: local
+      path: ../components
+
+brmesh:
+  id: brmesh_hub
+  ble_id: brmesh_ble
+  key: !secret brmesh_mesh_key
+  # Continuous advertising time per command. The phone app uses 3 s.
+  command_airtime: 1500ms
+
+light:
+  - platform: brmesh
+    brmesh_id: brmesh_hub
+    name: BRMesh All Lights
+    addresses: [1, 2, 3, 4]
+    # The app's 21 built-in animations are added automatically. Custom ones:
+    effects:
+      - brmesh_mode:
+          name: Party
+          preset: three_color_flash
+          speed: 60
+      - brmesh_mode:
+          name: Ocean
+          style: fade
+          colors: [blue, cyan, white, green]
+          speed: 10
+
+button:
+  - platform: template
+    name: BRMesh Start Pairing
+    entity_category: config
+    on_press:
+      - brmesh.start_pairing:
+          id: brmesh_hub
+
+  - platform: template
+    name: BRMesh Stop Pairing
+    entity_category: config
+    on_press:
+      - brmesh.stop_pairing:
+          id: brmesh_hub
+
+  - platform: template
+    name: BRMesh Clear Pairing Cache
+    entity_category: config
+    on_press:
+      - brmesh.clear_pairings:
+          id: brmesh_hub
